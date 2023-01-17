@@ -1,11 +1,13 @@
 package br.com.raissafrota.springboottests.services.Impl;
 
 import br.com.raissafrota.springboottests.domain.User;
+import br.com.raissafrota.springboottests.dto.UserDTO;
 import br.com.raissafrota.springboottests.exceptions.ObjectNotFoundException;
 import br.com.raissafrota.springboottests.repository.UserRepository;
 import br.com.raissafrota.springboottests.services.UserService;
 import java.util.List;
 import java.util.Optional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository repository;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public User findById(Integer id) {
@@ -24,5 +29,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public User create(UserDTO obj) {
+        return repository.save(modelMapper.map(obj, User.class));
     }
 }
