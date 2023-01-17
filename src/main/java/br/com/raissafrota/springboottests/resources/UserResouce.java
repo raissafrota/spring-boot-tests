@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping(value = "/user")
 public class UserResouce {
 
+    public static final String ID = "/{id}";
     @Autowired
     UserService service;
 
@@ -52,7 +53,7 @@ public class UserResouce {
         return ResponseEntity.ok().body(modelMapper.map(service.update(obj), UserDTO.class));
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = ID)
     public ResponseEntity<UserDTO> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
