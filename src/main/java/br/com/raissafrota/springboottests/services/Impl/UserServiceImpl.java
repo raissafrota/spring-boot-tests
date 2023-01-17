@@ -2,6 +2,7 @@ package br.com.raissafrota.springboottests.services.Impl;
 
 import br.com.raissafrota.springboottests.domain.User;
 import br.com.raissafrota.springboottests.dto.UserDTO;
+import br.com.raissafrota.springboottests.exceptions.DataIntegratyViolationException;
 import br.com.raissafrota.springboottests.exceptions.ObjectNotFoundException;
 import br.com.raissafrota.springboottests.repository.UserRepository;
 import br.com.raissafrota.springboottests.services.UserService;
@@ -33,6 +34,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(modelMapper.map(obj, User.class));
+    }
+
+    private void findByEmail(UserDTO obj) {
+        Optional<User> user = repository.findByEmail(obj.getEmail());
+        if(user.isPresent() && !user.get().getId().equals(obj.getId())) {
+            throw new DataIntegratyViolationException("E-mail já cadastrado no sistema!");
+        }
     }
 }
