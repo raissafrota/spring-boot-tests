@@ -3,6 +3,8 @@ package br.com.raissafrota.springboottests.resources;
 import br.com.raissafrota.springboottests.domain.User;
 import br.com.raissafrota.springboottests.dto.UserDTO;
 import br.com.raissafrota.springboottests.services.UserService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,12 @@ public class UserResouce {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
         return ResponseEntity.ok().body(modelMapper.map(service.findById(id), UserDTO.class));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> findAll() {
+        return ResponseEntity.ok().body(service.findAll()
+                .stream().map(obj -> modelMapper.map(obj, UserDTO.class)).collect(Collectors.toList()));
     }
 
 }
