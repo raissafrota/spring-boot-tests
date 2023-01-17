@@ -1,6 +1,7 @@
 package br.com.raissafrota.springboottests.services.Impl;
 
 import br.com.raissafrota.springboottests.domain.User;
+import br.com.raissafrota.springboottests.exceptions.ObjectNotFoundException;
 import br.com.raissafrota.springboottests.repository.UserRepository;
 import br.com.raissafrota.springboottests.services.UserService;
 import java.util.Optional;
@@ -16,6 +17,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Integer id) {
         Optional<User> obj = repository.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
     }
 }
