@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import br.com.raissafrota.springboottests.domain.User;
 import br.com.raissafrota.springboottests.dto.UserDTO;
+import br.com.raissafrota.springboottests.exceptions.ObjectNotFoundException;
 import br.com.raissafrota.springboottests.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,20 @@ class UserServiceImplTest {
         assertEquals(ID, response.getId());
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+
+        when(repository.findById(anyInt()))
+                .thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
+
+        try{
+            service.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+        }
     }
 
     @Test
